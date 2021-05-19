@@ -1,7 +1,9 @@
 package com.jiawa.wiki.controller;
 
 import com.jiawa.wiki.domain.Ebook;
+import com.jiawa.wiki.req.EbookReq;
 import com.jiawa.wiki.resp.CommonResp;
+import com.jiawa.wiki.resp.EbookResp;
 import com.jiawa.wiki.service.EbookService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,10 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp list(){
+    public CommonResp list(EbookReq req){
         //ctrl+alt+v 快速生成一个变量
-        CommonResp<List<Ebook>> resp = new CommonResp<>();
-        List<Ebook> list = ebookService.list();
+        CommonResp<List<EbookResp>> resp = new CommonResp<>();
+        List<EbookResp> list = ebookService.list(req);
         resp.setContent(list);
         return resp;
     }
