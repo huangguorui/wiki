@@ -1,5 +1,6 @@
 package com.jiawa.wiki.config;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,8 @@ import org.springframework.core.env.Environment;
 //@ComponentScan({"com.jiawa","com.test"})
 @ComponentScan("com.jiawa")
 @SpringBootApplication
+//扫描mapper包
+@MapperScan("com.jiawa.wiki.mapper")
 public class WikiApplication {
     private static final Logger LOG = LoggerFactory.getLogger(WikiApplication.class);
 
