@@ -5,6 +5,7 @@ import com.jiawa.wiki.domain.EbookExample;
 import com.jiawa.wiki.mapper.EbookMapper;
 import com.jiawa.wiki.req.EbookReq;
 import com.jiawa.wiki.resp.EbookResp;
+import com.jiawa.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> list(EbookReq req){
+    public List<EbookResp> list(EbookReq req) {
         //Example 相当于where条件 不传值可以设置为null或者new EbookExample()
         //ctrl+alt+v 快速生成变量
         EbookExample ebookExample = new EbookExample();
@@ -28,13 +29,18 @@ public class EbookService {
 
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
-        List<EbookResp> respList = new ArrayList<>();
+//        List<EbookResp> respList = new ArrayList<>();
         //iter
-        for (Ebook ebook : ebookList) {
-            EbookResp ebookResp = new EbookResp();
-            BeanUtils.copyProperties(ebook,ebookResp);
-            respList.add(ebookResp);
-        }
-        return respList;
+//        for (Ebook ebook : ebookList) {
+//            //EbookResp ebookResp = new EbookResp();
+//            //BeanUtils.copyProperties(ebook,ebookResp);
+//            //对象复制
+//            EbookResp ebookResp = CopyUtil.copy(ebook, EbookResp.class);
+//            respList.add(ebookResp);
+//        }
+        //列表复制
+        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
+
+        return list;
     }
 }
