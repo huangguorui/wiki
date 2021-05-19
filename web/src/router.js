@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/home.vue'
 import About from './views/about.vue'
+import AdminEbook from './views/admin/admin-ebook.vue'
 
 
 Vue.use(Router)
@@ -25,6 +26,14 @@ const router = new Router({
       component: About,
       meta: {
         title: "关于我们",
+      }
+    },
+    {
+      path: '/admin/ebook',
+      name: 'AdminEbook',
+      component: AdminEbook,
+      meta: {
+        title: "后台管理",
       }
     }
     // {

@@ -6,6 +6,7 @@
   <div class="container">
     {{list}}
     <router-link to="/about">关于我们</router-link>
+    <router-link to="/admin/ebook">后台管理</router-link>
 
   </div>
 </template>
