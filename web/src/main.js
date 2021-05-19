@@ -15,6 +15,7 @@ import axios from 'axios'
 Vue.prototype.$axios = axios
 
 console.log('环境：',process.env.NODE_ENV)
+console.log('服务器：',process.env.VUE_APP_SERVER)
 
 new Vue({
   router,

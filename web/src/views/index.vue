@@ -35,7 +35,7 @@ export default {
   methods: {
     getList () {
       this.$axios({
-        url: "http://127.0.0.1:8800/ebook/list?name=Spring",
+        url: process.env.VUE_APP_SERVER+"/ebook/list?name=Spring",
         method: "get",
         params: {}
       }).then(res => {
