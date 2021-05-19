@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from './views/index.vue'
+import Home from './views/home.vue'
+import About from './views/about.vue'
 
 
 Vue.use(Router)
@@ -12,13 +13,20 @@ const router = new Router({
   linkActiveClass: 'active',
   routes: [{
       path: '/',
-      name: 'index',
-      component: index,
+      name: 'Home',
+      component: Home,
       meta: {
         title: "首页-前端博客",
       }
     },
-
+    {
+      path: '/about',
+      name: 'About',
+      component: About,
+      meta: {
+        title: "关于我们",
+      }
+    }
     // {
     //   path: '/404',
     //   name: '404',

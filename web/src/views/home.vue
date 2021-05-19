@@ -5,6 +5,8 @@
 <template>
   <div class="container">
     {{list}}
+    <router-link to="/about">关于我们</router-link>
+
   </div>
 </template>
 <script>
