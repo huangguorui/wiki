@@ -1,10 +1,14 @@
 
 <style  lang="less" scoped>
-
 </style>
 <template>
   <div class="container">
-    {{list}}
+    <Table :columns="titleTable"
+           :data="list"></Table>
+    <!-- <Page :total="pageInfo.total"
+          :page-size="pageInfo.size"
+          @on-change="page" /> -->
+    {{pageInfo.total}}
     <router-link to="/about">关于我们</router-link>
     <router-link to="/admin/ebook">后台管理</router-link>
 
@@ -13,41 +17,67 @@
 <script>
 export default {
   name: 'Index',
-  components: {
-  },
-
   data () {
     return {
+      titleTable: [
+        {
+          title: 'name',
+          key: 'name'
+        },
+
+      ],
+
+      //       category1Id: null
+      // category2Id: null
+      // cover: null
+      // description: "零基础入门 Java 开发，企业级应用开发最佳首选框架"
+      // docCount: 0
+      // id: 1
+      // name: "Spring Boot 入门教程"
+      // viewCount: 0
+      // voteCount: 0
       list: [
         {
+          name: 'John Brown',
+        },
 
-        }
       ],
       pageInfo: {
-        current: 1,
-        size: 5,
-        pages: 1,
-        total: 1,
+        total: 0,
+        size: 2,
+        page: 1
       }
 
     }
   },
-  created(){
+  created () {
     this.getList()
   },
   methods: {
+    page (e) {
+      console.log(e)
+      this.pageInfo.page = e
+      this.getList()
+
+    },
     getList () {
       this.$axios({
-        url: "/ebook/list?name=Spring",
+        url: "/ebook/list",
         method: "get",
-        params: {}
+        params: {
+          page: this.pageInfo.page,
+          size: 1000
+        }
       }).then(res => {
-        this.list = res
+        this.list = res.data.content.list
+        this.pageInfo.total = res.data.content.total
+        console.log(res.data.content.total)
+
         console.log(res)
 
       })
     }
 
-  }
+  },
 }
 </script>
