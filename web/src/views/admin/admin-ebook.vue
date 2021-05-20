@@ -10,6 +10,12 @@
           @on-change="page" />
     {{pageInfo.total}}
 
+    <Modal v-model="isDeleteDrawer"
+           title="删除数据"
+           :footer-hide="true">
+      <div>您确定删除数据id为{{this.delList}}的数据吗</div>
+      <Button @click="del">确定</Button>
+    </Modal>
     <Modal v-model="isCloseDrawer"
            :title="titleDrawer"
            :footer-hide="true">
@@ -165,8 +171,9 @@ export default {
                 on: {
                   click: () => {
                     console.log(params.row)
-                    this.delList = [params.row.id]
-                    this.isModalClose = true
+                    // this.delList = [params.row.id]
+                    this.delList = params.row.id
+                    this.isDeleteDrawer = true
                   }
                 }
               }, '删除')
@@ -178,12 +185,14 @@ export default {
       loading: true,
       isCloseDrawer: false,
       titleDrawer: "",
+      isDeleteDrawer: false,
       list: [],
       pageInfo: {
         total: 0,
         size: 2,
         page: 1
-      }
+      },
+      delList: null,
 
     }
   },
@@ -191,6 +200,23 @@ export default {
     this.getList()
   },
   methods: {
+    del () {
+      this.isDeleteDrawer = false
+      this.$axios({
+        url: "/ebook/delete/" + this.delList,
+        method: "delete",
+        //  data: {
+        //       "dailyId": "dbc576e9-2979-4443-8288-cffb234772b9"
+        //     }
+      }).then(res => {
+        if (res.data.success) {
+          this.getList()
+
+        }
+
+
+      })
+    },
     add () {
       //   this.formData = {}
       this.isCloseDrawer = true

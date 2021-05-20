@@ -33,5 +33,12 @@ public class EbookController {
         ebookService.save(req);
         return resp;
     }
+    @DeleteMapping("/delete/{id}")
+    public CommonResp delete(@PathVariable Long id){
+        //ctrl+alt+v 快速生成一个变量
+        CommonResp resp = new CommonResp<>();
+        ebookService.delete(id);
+        return resp;
+    }
 
 }
