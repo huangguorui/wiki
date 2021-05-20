@@ -7,17 +7,15 @@ import com.jiawa.wiki.domain.EbookExample;
 import com.jiawa.wiki.mapper.EbookMapper;
 import com.jiawa.wiki.req.EbookReq;
 import com.jiawa.wiki.req.EbookSaveReq;
-import com.jiawa.wiki.resp.EbookResp;
+import com.jiawa.wiki.resp.EbookQueryResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.util.CopyUtil;
-import org.springframework.beans.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +26,7 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookReq req) {
 
         PageHelper.startPage(req.getPage(),req.getSize());
 
@@ -48,20 +46,20 @@ public class EbookService {
         LOG.info("总行数：{}",pageInfo.getTotal());
         LOG.info("总页数：{}",pageInfo.getPages());
 
-//        List<EbookResp> respList = new ArrayList<>();
+//        List<EbookQueryResp> respList = new ArrayList<>();
         //iter
 //        for (Ebook ebook : ebookList) {
-//            //EbookResp ebookResp = new EbookResp();
+//            //EbookQueryResp ebookResp = new EbookQueryResp();
 //            //BeanUtils.copyProperties(ebook,ebookResp);
 //            //对象复制
-//            EbookResp ebookResp = CopyUtil.copy(ebook, EbookResp.class);
+//            EbookQueryResp ebookResp = CopyUtil.copy(ebook, EbookQueryResp.class);
 //            respList.add(ebookResp);
 //        }
 
         //列表复制
-        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
+        List<EbookQueryResp> list = CopyUtil.copyList(ebookList, EbookQueryResp.class);
 
-        PageResp<EbookResp> pageResp = new PageResp();
+        PageResp<EbookQueryResp> pageResp = new PageResp();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
 
