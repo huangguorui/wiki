@@ -1,6 +1,10 @@
 <template>
   <div class="about">
     <h1>后台管理</h1>
+    <Input v-model="search"
+           placeholder="Enter something..."
+           style="width: 300px" />
+    <Button @click="seleteValue">搜索</Button>
     <Button @click="add">新增</Button>
     <Table :columns="titleTable"
            :loading="loading"
@@ -71,6 +75,7 @@ export default {
       }
     };
     return {
+      search: "",
       formData: {
         // cover: "",
         // name: "",
@@ -99,12 +104,12 @@ export default {
         category1Id: [
           { required: true, validator: validateTest, trigger: 'blur' }
         ],
-        // category2Id: [
-        //   { required: true, validator: validateTest, trigger: 'blur' }
-        // ],
-        // description: [
-        //   { required: true, message: '不能为空', trigger: 'blur' }
-        // ],
+        category2Id: [
+          { required: true, validator: validateTest, trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
       },
       titleTable: [
         {
@@ -200,6 +205,10 @@ export default {
     this.getList()
   },
   methods: {
+    seleteValue () {
+      this.pageInfo.page = 1
+      this.getList()
+    },
     del () {
       this.isDeleteDrawer = false
       this.$axios({
@@ -254,7 +263,8 @@ export default {
         method: "get",
         params: {
           page: this.pageInfo.page,
-          size: this.pageInfo.size
+          size: this.pageInfo.size,
+          name: this.search
         }
       }).then(res => {
         const data = res.data
