@@ -1,6 +1,7 @@
 package com.jiawa.wiki.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jiawa.wiki.domain.Ebook;
 import com.jiawa.wiki.domain.EbookExample;
 import com.jiawa.wiki.mapper.EbookMapper;
@@ -8,6 +9,8 @@ import com.jiawa.wiki.req.EbookReq;
 import com.jiawa.wiki.resp.EbookResp;
 import com.jiawa.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -17,12 +20,15 @@ import java.util.List;
 
 @Service
 public class EbookService {
-
+    private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
+    
+    
     @Resource
     private EbookMapper ebookMapper;
 
     public List<EbookResp> list(EbookReq req) {
 
+        PageHelper.startPage(1,3);
 
         //Example 相当于where条件 不传值可以设置为null或者new EbookExample()
         //ctrl+alt+v 快速生成变量
@@ -34,6 +40,11 @@ public class EbookService {
         }
 
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
+        pageInfo.getTotal();
+        pageInfo.getPages();
+        LOG.info("总行数：{}",pageInfo.getTotal());
+        LOG.info("总页数：{}",pageInfo.getPages());
 
 //        List<EbookResp> respList = new ArrayList<>();
         //iter

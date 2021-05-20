@@ -2,3 +2,6 @@
 GET http://127.0.0.1:8800/ebook/list?name=Spring
 
 ###
+GET http://127.0.0.1:8800/ebook/list
+
+###
