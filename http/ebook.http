@@ -9,3 +9,18 @@ GET http://127.0.0.1:8800/ebook/list
 GET http://127.0.0.1:8800/ebook/list?page=1&size=4
 
 ###
+
+#快捷键 ptr    Content-Type: application/json需要添加@RequestBody
+POST http://localhost:8800/ebook/save
+Content-Type: application/json
+
+{}
+
+###
+//ptrp   Content-Type: application/x-www-form-urlencoded不需要添加@RequestBody
+POST http://localhost:80/api/item
+Content-Type: application/x-www-form-urlencoded
+
+id=99&content=new-element
+
+###

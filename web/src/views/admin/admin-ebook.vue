@@ -2,6 +2,7 @@
   <div class="about">
     <h1>后台管理</h1>
     <Table :columns="titleTable"
+           :loading="loading"
            :data="list"></Table>
     <Page :total="pageInfo.total"
           :page-size="pageInfo.size"
@@ -55,15 +56,24 @@
 export default {
 
   data () {
+    const validateTest = (rule, value, callback) => {
+      if (/^[0-9]+$/.test(value)) {
+        callback();
+      } else {
+        return callback(new Error("请填写整数"));
+      }
+    };
     return {
       formData: {
         cover: "",
         name: "",
-        category1Id: "",
-        category2Id: "",
+        category1Id: null,
+        category2Id: null,
         description: ""
       },
+
       ruleValidate: {
+
         cover: [
           { required: true, message: '不能为空', trigger: 'blur' }
         ],
@@ -71,10 +81,10 @@ export default {
           { required: true, message: '不能为空', trigger: 'blur' }
         ],
         category1Id: [
-          { required: true, message: '不能为空', trigger: 'blur' }
+          { required: true, validator: validateTest, trigger: 'blur' }
         ],
         category2Id: [
-          { required: true, message: '不能为空', trigger: 'blur' }
+          { required: true, validator: validateTest, trigger: 'blur' }
         ],
         description: [
           { required: true, message: '不能为空', trigger: 'blur' }
@@ -82,8 +92,32 @@ export default {
       },
       titleTable: [
         {
+          title: '封面',
+          key: 'cover'
+        },
+        {
           title: '名称',
           key: 'name'
+        },
+        {
+          title: '分类一',
+          key: 'category1Id'
+        },
+        {
+          title: '分类二',
+          key: 'category2Id'
+        },
+        {
+          title: '文档数',
+          key: 'docCount'
+        },
+        {
+          title: '阅读量',
+          key: 'viewCount'
+        },
+        {
+          title: '点赞数',
+          key: 'voteCount'
         },
         {
           title: '操作',
@@ -131,18 +165,10 @@ export default {
         }
 
       ],
-
+      loading: true,
       isCloseDrawer: false,
       titleDrawer: "",
-      list: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-
-      ],
+      list: [],
       pageInfo: {
         total: 0,
         size: 2,
@@ -160,6 +186,8 @@ export default {
         if (valid) {
           this.$Message.success('Success!');
           this.isCloseDrawer = false
+          //校验成功，发送请求
+          this.save(this.formData)
 
         } else {
           this.$Message.error('Fail!');
@@ -179,6 +207,7 @@ export default {
 
     },
     getList () {
+      this.loading = true
       this.$axios({
         url: "/ebook/list",
         method: "get",
@@ -189,9 +218,22 @@ export default {
       }).then(res => {
         this.list = res.data.content.list
         this.pageInfo.total = res.data.content.total
-        console.log(res.data.content.total)
+        this.loading = false
 
-        console.log(res)
+
+      })
+    },
+    save (data) {
+      this.$axios({
+        url: "/ebook/save",
+        method: "post",
+        data: data
+      }).then(res => {
+        if (res.data.success) {
+          this.getList()
+
+        }
+
 
       })
     }

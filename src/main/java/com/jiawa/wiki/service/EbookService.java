@@ -6,6 +6,7 @@ import com.jiawa.wiki.domain.Ebook;
 import com.jiawa.wiki.domain.EbookExample;
 import com.jiawa.wiki.mapper.EbookMapper;
 import com.jiawa.wiki.req.EbookReq;
+import com.jiawa.wiki.req.EbookSaveReq;
 import com.jiawa.wiki.resp.EbookResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.util.CopyUtil;
@@ -65,5 +66,22 @@ public class EbookService {
         pageResp.setList(list);
 
         return pageResp;
+    }
+
+    /**
+     * 保存
+     * @param req
+     */
+    public void save(EbookSaveReq req){
+        //复制
+        Ebook ebook = CopyUtil.copy(req,Ebook.class);
+
+        if (ObjectUtils.isEmpty(req.getId())){
+            //为空新增
+            ebookMapper.insert(ebook);
+        }else {
+            //更新
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
     }
 }
