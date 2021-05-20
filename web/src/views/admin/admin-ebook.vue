@@ -1,6 +1,7 @@
 <template>
   <div class="about">
     <h1>后台管理</h1>
+    <Button @click="add">新增</Button>
     <Table :columns="titleTable"
            :loading="loading"
            :data="list"></Table>
@@ -65,11 +66,20 @@ export default {
     };
     return {
       formData: {
-        cover: "",
-        name: "",
+        // cover: "",
+        // name: "",
+        // category1Id: null,
+        // category2Id: null,
+        // description: ""
         category1Id: null,
         category2Id: null,
-        description: ""
+        cover: "",
+        description: "",
+        docCount: 0,
+        id: null,
+        name: "",
+        viewCount: 0,
+        voteCount: 0,
       },
 
       ruleValidate: {
@@ -181,6 +191,11 @@ export default {
     this.getList()
   },
   methods: {
+    add () {
+      //   this.formData = {}
+      this.isCloseDrawer = true
+      this.titleDrawer = "新增资源"
+    },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
