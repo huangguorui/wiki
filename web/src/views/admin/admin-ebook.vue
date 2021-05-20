@@ -1,8 +1,12 @@
 <template>
   <div class="about">
     <h1>后台管理</h1>
-    <Table :columns="columns1"
+    <Table :columns="titleTable"
            :data="list"></Table>
+    <Page :total="pageInfo.total"
+          :page-size="pageInfo.size"
+          @on-change="page" />
+    {{pageInfo.total}}
   </div>
 </template>
 <script>
@@ -10,7 +14,7 @@ export default {
 
   data () {
     return {
-      columns1: [
+      titleTable: [
         {
           title: 'name',
           key: 'name'
@@ -35,21 +39,38 @@ export default {
           date: '2016-10-03'
         },
 
-      ]
+      ],
+      pageInfo: {
+        total: 0,
+        size: 2,
+        page: 1
+      }
+
     }
   },
   created () {
     this.getList()
   },
   methods: {
+    page (e) {
+      console.log(e)
+      this.pageInfo.page = e
+      this.getList()
+
+    },
     getList () {
       this.$axios({
-        url: "/ebook/list?name=Spring",
+        url: "/ebook/list",
         method: "get",
-        params: {}
+        params: {
+          page: this.pageInfo.page,
+          size: this.pageInfo.size
+        }
       }).then(res => {
-        console.log(res)
-        this.list = res.data.content
+        this.list = res.data.content.list
+        this.pageInfo.total = res.data.content.total
+        console.log(res.data.content.total)
+
         console.log(res)
 
       })
