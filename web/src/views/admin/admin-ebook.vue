@@ -80,7 +80,8 @@ export default {
         category1Id: null,
         category2Id: null,
         cover: "",
-        description: "",
+        //不能为""，需要为null
+        description: null,
         docCount: 0,
         id: null,
         name: "",
@@ -89,7 +90,6 @@ export default {
       },
 
       ruleValidate: {
-
         cover: [
           { required: true, message: '不能为空', trigger: 'blur' }
         ],
@@ -99,12 +99,12 @@ export default {
         category1Id: [
           { required: true, validator: validateTest, trigger: 'blur' }
         ],
-        category2Id: [
-          { required: true, validator: validateTest, trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: '不能为空', trigger: 'blur' }
-        ],
+        // category2Id: [
+        //   { required: true, validator: validateTest, trigger: 'blur' }
+        // ],
+        // description: [
+        //   { required: true, message: '不能为空', trigger: 'blur' }
+        // ],
       },
       titleTable: [
         {
@@ -218,15 +218,15 @@ export default {
       })
     },
     add () {
-      //   this.formData = {}
+      this.$refs["formData"].resetFields();
+
       this.isCloseDrawer = true
       this.titleDrawer = "新增资源"
     },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('Success!');
-          this.isCloseDrawer = false
+          //   this.$Message.success('Success!');
           //校验成功，发送请求
           this.save(this.formData)
 
@@ -257,8 +257,14 @@ export default {
           size: this.pageInfo.size
         }
       }).then(res => {
-        this.list = res.data.content.list
-        this.pageInfo.total = res.data.content.total
+        const data = res.data
+        if (data.success) {
+          this.list = data.content.list
+          this.pageInfo.total = data.content.total
+        } else {
+          this.$Message.error(data.message);
+        }
+
         this.loading = false
 
 
@@ -270,12 +276,15 @@ export default {
         method: "post",
         data: data
       }).then(res => {
-        if (res.data.success) {
+        const data = res.data
+        if (data.success) {
           this.getList()
+          this.isCloseDrawer = false
 
+        } else {
+          this.isCloseDrawer = true
+          this.$Message.error(data.message);
         }
-
-
       })
     }
 
