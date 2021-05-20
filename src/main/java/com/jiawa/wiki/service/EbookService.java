@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EbookService {
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
-    
-    
+
+
     @Resource
     private EbookMapper ebookMapper;
 
@@ -80,7 +81,12 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req,Ebook.class);
 
         if (ObjectUtils.isEmpty(req.getId())){
-            ebook.setId(snowFlake.nextId());
+            //TODO 使用雪花算法之后，传给前端的数据id和数据库对应的id值没有对应，暂时13位数的时间戳替代
+            // ebook.setId(snowFlake.nextId());
+            // UUID uuid = UUID.randomUUID();
+            // String id = uuid.toString();
+            long  timeNew =  System.currentTimeMillis(); // 13位数的时间戳
+            ebook.setId(timeNew);
             //为空新增
             ebookMapper.insert(ebook);
         }else {
