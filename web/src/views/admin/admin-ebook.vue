@@ -7,6 +7,48 @@
           :page-size="pageInfo.size"
           @on-change="page" />
     {{pageInfo.total}}
+
+    <Modal v-model="isCloseDrawer"
+           :title="titleDrawer"
+           :footer-hide="true">
+      <Form ref="formData"
+            :model="formData"
+            :rules="ruleValidate"
+            :label-width="80">
+        <FormItem label="封面"
+                  prop="cover">
+          <Input v-model="formData.cover"
+                 placeholder=""></Input>
+        </FormItem>
+        <FormItem label="名称"
+                  prop="name">
+          <Input v-model="formData.name"
+                 placeholder=""></Input>
+        </FormItem>
+        <FormItem label="分类一"
+                  prop="category1Id">
+          <Input v-model="formData.category1Id"
+                 placeholder=""></Input>
+        </FormItem>
+        <FormItem label="分类二"
+                  prop="category2Id">
+          <Input v-model="formData.category2Id"
+                 placeholder=""></Input>
+        </FormItem>
+        <FormItem label="描述"
+                  prop="description">
+          <Input v-model="formData.description"
+                 placeholder=""></Input>
+        </FormItem>
+
+        <FormItem>
+          <Button type="primary"
+                  @click="handleSubmit('formData')">Submit</Button>
+          <Button @click="handleReset('formData')"
+                  style="margin-left: 8px">Reset</Button>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 <script>
@@ -14,23 +56,84 @@ export default {
 
   data () {
     return {
+      formData: {
+        cover: "",
+        name: "",
+        category1Id: "",
+        category2Id: "",
+        description: ""
+      },
+      ruleValidate: {
+        cover: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        category1Id: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        category2Id: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+      },
       titleTable: [
         {
-          title: 'name',
+          title: '名称',
           key: 'name'
         },
+        {
+          title: '操作',
+          align: 'center',
+          type: 'text',
+          width: 260,
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                // props: {
+                //   size: 'small'
+                // },
+                on: {
+                  click: () => {
+                    this.isCloseDrawer = true
+                    this.titleDrawer = '编辑资源'
+                    // 防止表格中的数据随着修改而发生改变
+                    this.formData = Object.assign({}, params.row)
+                    console.log(params.row)
+                  }
+                }
+              }, '编辑'),
+              h('Button', {
+                props: {
+                  type: 'error',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    console.log(params.row)
+                    this.delList = [params.row.id]
+                    this.isModalClose = true
+                  }
+                }
+              }, '删除')
+            ])
+          }
+        }
 
       ],
 
-      //       category1Id: null
-      // category2Id: null
-      // cover: null
-      // description: "零基础入门 Java 开发，企业级应用开发最佳首选框架"
-      // docCount: 0
-      // id: 1
-      // name: "Spring Boot 入门教程"
-      // viewCount: 0
-      // voteCount: 0
+      isCloseDrawer: false,
+      titleDrawer: "",
       list: [
         {
           name: 'John Brown',
@@ -52,6 +155,23 @@ export default {
     this.getList()
   },
   methods: {
+    handleSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$Message.success('Success!');
+          this.isCloseDrawer = false
+
+        } else {
+          this.$Message.error('Fail!');
+          this.isCloseDrawer = true
+
+        }
+      })
+    },
+    handleReset (name) {
+      this.$refs[name].resetFields();
+    },
+
     page (e) {
       console.log(e)
       this.pageInfo.page = e
