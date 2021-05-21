@@ -13,6 +13,7 @@
           :page-size="pageInfo.size"
           @on-change="page" />
     {{pageInfo.total}}
+    {{formData}}
 
     <Modal v-model="isDeleteDrawer"
            title="删除数据"
@@ -28,16 +29,18 @@
             :rules="ruleValidate"
             :label-width="80">
 
+        <FormItem label="登录名"
+                  prop="loginName">
+          <Input v-model="formData.loginName"
+                 :disabled="!!formData.id"
+                 placeholder=""></Input>
+        </FormItem>
         <FormItem label="昵称"
                   prop="name">
           <Input v-model="formData.name"
                  placeholder=""></Input>
         </FormItem>
-        <FormItem label="登录名"
-                  prop="loginName">
-          <Input v-model="formData.loginName"
-                 placeholder=""></Input>
-        </FormItem>
+
         <FormItem label="密码"
                   prop="password">
           <Input v-model="formData.password"
@@ -87,12 +90,12 @@ export default {
       },
       titleTable: [
         {
-          title: '昵称',
-          key: 'name'
-        },
-        {
           title: '登录名',
           key: 'loginName'
+        },
+        {
+          title: '昵称',
+          key: 'name'
         },
         {
           title: '密码',
@@ -185,7 +188,13 @@ export default {
       })
     },
     add () {
-      this.$refs["formData"].resetFields();
+      // this.$refs["formData"].resetFields();
+      this.formData = {
+        id: null,//不添加会替换
+        name: "",
+        loginName: "",
+        password: ""
+      }
 
       this.isCloseDrawer = true
       this.titleDrawer = "新增资源"
