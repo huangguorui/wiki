@@ -10,7 +10,8 @@
           @on-change="page" /> -->
     {{pageInfo.total}}
     <router-link to="/about">关于我们</router-link>
-    <router-link to="/admin/ebook">后台管理</router-link>
+    <router-link to="/admin/ebook">后台电子书管理</router-link>
+    <router-link to="/admin/category">后台主题管理</router-link>
 
   </div>
 </template>

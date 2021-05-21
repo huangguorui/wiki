@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/home.vue'
 import About from './views/about.vue'
 import AdminEbook from './views/admin/admin-ebook.vue'
+import AdminCategory from './views/admin/admin-category.vue'
 
 
 Vue.use(Router)
@@ -35,7 +36,18 @@ const router = new Router({
       meta: {
         title: "后台管理",
       }
+    },
+    {
+      path: '/admin/category',
+      name: 'AdminCategory',
+      component: AdminCategory,
+      meta: {
+        title: "后台主题管理",
+      }
     }
+
+
+    
     // {
     //   path: '/404',
     //   name: '404',
