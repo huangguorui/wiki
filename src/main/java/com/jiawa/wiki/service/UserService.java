@@ -101,6 +101,7 @@ public class UserService {
         }else {
             //更新
             user.setLoginName(null);
+            user.setPassword(null);
             //loginName的值为null，有值才会被更新
             //updateByPrimaryKeySelective有值才去更新，没有值不更新
             userMapper.updateByPrimaryKeySelective(user);

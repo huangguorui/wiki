@@ -42,7 +42,8 @@
         </FormItem>
 
         <FormItem label="密码"
-                  prop="password">
+                  prop="password"
+                  v-show="!formData.id">
           <Input v-model="formData.password"
                  placeholder=""></Input>
         </FormItem>
@@ -109,7 +110,23 @@ export default {
           type: 'text',
           width: 260,
           render: (h, params) => {
+
+
             return h('div', [
+              h('Button', {
+                props: {
+                  type: 'error',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    console.log(params.row)
+                    // this.delList = [params.row.id]
+                    this.delList = params.row.id
+                    this.isDeleteDrawer = true
+                  }
+                }
+              }, '重置'),
               h('Button', {
                 props: {
                   type: 'primary',
