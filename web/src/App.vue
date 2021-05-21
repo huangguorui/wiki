@@ -3,13 +3,16 @@
 
 <template>
   <div id="app">
+    <h1>
+      <router-link to="/">首页</router-link>
+    </h1>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
-<!--    <head-nav></head-nav>-->
+    <!--    <head-nav></head-nav>-->
     <router-view />
-<!--    <foot-nav></foot-nav>-->
+    <!--    <foot-nav></foot-nav>-->
   </div>
 </template>
 <script>

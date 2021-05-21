@@ -3,15 +3,30 @@
 </style>
 <template>
   <div class="container">
+    <ul>
+      <li>
+        <router-link to="/about">关于我们</router-link>
+      </li>
+      <li>
+        <router-link to="/admin/ebook">后台电子书管理</router-link>
+
+      </li>
+      <li>
+        <router-link to="/admin/category">后台主题管理</router-link>
+
+      </li>
+      <li>
+        <router-link to="/admin/user">后台用户管理</router-link>
+
+      </li>
+    </ul>
+
     <Table :columns="titleTable"
            :data="list"></Table>
     <!-- <Page :total="pageInfo.total"
           :page-size="pageInfo.size"
           @on-change="page" /> -->
     {{pageInfo.total}}
-    <router-link to="/about">关于我们</router-link>
-    <router-link to="/admin/ebook">后台电子书管理</router-link>
-    <router-link to="/admin/category">后台主题管理</router-link>
 
   </div>
 </template>
