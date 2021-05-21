@@ -58,8 +58,10 @@
   </div>
 </template>
 <script>
+import { hexMd5, KEY } from "./../../util/md5.js"
+console.log(hexMd5("fasdfasd"))
+console.log(KEY)
 export default {
-
   data () {
     // const validateTest = (rule, value, callback) => {
     //   if (/^[0-9]+$/.test(value)) {
@@ -248,6 +250,10 @@ export default {
       })
     },
     save (data) {
+
+      //key 盐值
+      data.password = hexMd5(data.password + KEY)
+      // console.log(data)
       this.$axios({
         url: "/user/save",
         method: "post",
