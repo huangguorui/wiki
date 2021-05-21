@@ -28,12 +28,12 @@
             :rules="ruleValidate"
             :label-width="80">
 
-        <FormItem label="姓名"
+        <FormItem label="昵称"
                   prop="name">
           <Input v-model="formData.name"
                  placeholder=""></Input>
         </FormItem>
-        <FormItem label="登录名称"
+        <FormItem label="登录名"
                   prop="loginName">
           <Input v-model="formData.loginName"
                  placeholder=""></Input>
@@ -87,11 +87,11 @@ export default {
       },
       titleTable: [
         {
-          title: '姓名',
+          title: '昵称',
           key: 'name'
         },
         {
-          title: '登录名称',
+          title: '登录名',
           key: 'loginName'
         },
         {
@@ -222,7 +222,7 @@ export default {
         params: {
           page: this.pageInfo.page,
           size: this.pageInfo.size,
-          name: this.search
+          loginName: this.search
         }
       }).then(res => {
         const data = res.data

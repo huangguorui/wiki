@@ -4,6 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jiawa.wiki.domain.User;
 import com.jiawa.wiki.domain.UserExample;
+import com.jiawa.wiki.exception.BusinessException;
+import com.jiawa.wiki.exception.BusinessExceptionCode;
 import com.jiawa.wiki.mapper.UserMapper;
 import com.jiawa.wiki.req.UserQueryReq;
 import com.jiawa.wiki.req.UserSaveReq;
@@ -14,9 +16,11 @@ import com.jiawa.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -79,14 +83,21 @@ public class UserService {
         User user = CopyUtil.copy(req,User.class);
 
         if (ObjectUtils.isEmpty(req.getId())){
-            //TODO 使用雪花算法之后，传给前端的数据id和数据库对应的id值没有对应，暂时13位数的时间戳替代
-            // user.setId(snowFlake.nextId());
-            // UUID uuid = UUID.randomUUID();
-            // String id = uuid.toString();
-            long  timeNew =  System.currentTimeMillis(); // 13位数的时间戳
-            user.setId(timeNew);
-            //为空新增
-            userMapper.insert(user);
+            User userDB = selectByLoginName(req.getLoginName());
+            if(ObjectUtils.isEmpty(userDB)){
+                //TODO 使用雪花算法之后，传给前端的数据id和数据库对应的id值没有对应，暂时13位数的时间戳替代
+                // user.setId(snowFlake.nextId());
+                // UUID uuid = UUID.randomUUID();
+                // String id = uuid.toString();
+                long  timeNew =  System.currentTimeMillis(); // 13位数的时间戳
+                user.setId(timeNew);
+                //为空新增
+                userMapper.insert(user);
+            }else {
+                //用户名已存在
+                throw new BusinessException((BusinessExceptionCode.USER_LOGIN_NAME_EXIST));
+            }
+
         }else {
             //更新
             userMapper.updateByPrimaryKey(user);
@@ -96,5 +107,17 @@ public class UserService {
     public void delete(Long id){
         //根据主键删除
         userMapper.deleteByPrimaryKey(id);
+    }
+
+    public User selectByLoginName(String loginName){
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (CollectionUtils.isEmpty(userList)){
+            return null;
+        }else {
+          return   userList.get(0);
+        }
     }
 }
