@@ -68,10 +68,9 @@ export default {
     return {
       search: "",
       formData: {
-        // "id": ,
-        // "parent": 0,
-        // "name": "前端开发",
-        // "sort": 100
+        "parent": null,
+        "name": null,
+        "sort": null
       },
 
       ruleValidate: {
