@@ -37,6 +37,7 @@ public class CategoryService {
         //Example 相当于where条件 不传值可以设置为null或者new CategoryExample()
         //ctrl+alt+v 快速生成变量
         CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
         CategoryExample.Criteria criteria = categoryExample.createCriteria();
 //        //左匹配和右匹配
 //        if(!ObjectUtils.isEmpty(req.getName())){
@@ -68,6 +69,19 @@ public class CategoryService {
         pageResp.setList(list);
 
         return pageResp;
+    }
+    public List<CategoryQueryResp> all() {
+
+        CategoryExample categoryExample = new CategoryExample();
+
+        //排序
+        categoryExample.setOrderByClause("sort asc");
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+
+        //列表复制
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+
+        return list;
     }
 
     /**

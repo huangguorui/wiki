@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -26,6 +27,15 @@ public class CategoryController {
         resp.setContent(list);
         return resp;
     }
+    @GetMapping("/all")
+    public CommonResp all(){
+        //ctrl+alt+v 快速生成一个变量
+        CommonResp<List<CategoryQueryResp>> resp = new CommonResp<>();
+        List<CategoryQueryResp> list = categoryService.all();
+        resp.setContent(list);
+        return resp;
+    }
+
 
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody CategorySaveReq req){
