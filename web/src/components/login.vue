@@ -18,20 +18,20 @@
            :footerHide="true"
            width="320"
            class-name="vertical-center-modal">
-      <Form ref="formInline"
-            :model="formInline"
+      <Form ref="formData"
+            :model="formData"
             :rules="ruleInline">
-        <FormItem prop="user">
+        <FormItem prop="loginName">
           <Input type="text"
-                 v-model="formInline.user"
-                 placeholder="请输入用户名">
+                 v-model="formData.loginName"
+                 placeholder="请输入登录名">
           <Icon type="ios-person-outline"
                 slot="prepend"></Icon>
           </Input>
         </FormItem>
         <FormItem prop="password">
           <Input type="password"
-                 v-model="formInline.password"
+                 v-model="formData.password"
                  placeholder="请输入密码">
           <Icon type="ios-lock-outline"
                 slot="prepend"></Icon>
@@ -39,7 +39,7 @@
         </FormItem>
         <FormItem>
           <Button type="primary"
-                  @click="handleSubmit('formInline')">登陆</Button>
+                  @click="handleSubmit('formData')">登陆</Button>
         </FormItem>
       </Form>
 
@@ -53,12 +53,12 @@ export default {
       current: 0,
       modal9: false,
       modal: false,
-      formInline: {
-        user: '',
+      formData: {
+        loginName: '',
         password: ''
       },
       ruleInline: {
-        user: [
+        loginName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
@@ -68,17 +68,31 @@ export default {
       }
     }
   },
-  props: {
-    forData: {
-      type: Object
-    }
-  },
+  // props: {
+  //   forData: {
+  //     type: Object
+  //   }
+  // },
   methods: {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.modal = false;
-          this.$Message.success('登录成功');
+          this.$axios({
+            url: "/user/login",
+            method: "post",
+            data: this.formData
+          }).then(res => {
+            const data = res.data
+            console.log(data)
+            if (data.success) {
+              this.modal = false
+            } else {
+              this.$Message.error(data.message);
+              this.modal = true
+
+            }
+          })
         } else {
           this.$Message.error('登录失败');
         }

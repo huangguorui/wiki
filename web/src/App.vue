@@ -6,6 +6,7 @@
     <h1>
       <router-link to="/">首页</router-link>
     </h1>
+    <login></login>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -20,6 +21,7 @@
 import headNav from './components/header/header.vue'
 //import vipHots from './components/vipHots/vipHots.vue'
 import footNav from './components/footer/footer.vue'
+import login from './components/login.vue'
 export default {
   data () {
     return {
@@ -62,7 +64,7 @@ export default {
     }
   },
   components: {
-
+    login
   }
 }
 </script>
