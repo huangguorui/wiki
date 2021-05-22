@@ -13,7 +13,8 @@
     <div class="footer">
       <Footer v-show="flag"
               class="layout-footer-center">
-        <p style="text-align:center">&copy; 2019-至今</p>
+        {{$store.state.user}}
+        <p style="text-align:center">&copy; 2021-至今</p>
       </Footer>
     </div>
   </div>

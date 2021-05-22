@@ -5,17 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: {}
+    user: JSON.parse(localStorage.getItem("user")) || {}
   },
   mutations: {
     setUser(state, user) {
-      //没有值优先读取本地缓存
+      state.user = user
 
-      // if (localStorage.getItem("user") != null) {
-      //   state.user = localStorage.getItem("user")
-      // } else {
-      //   state.user = user
-      // }
+      localStorage.setItem("user", JSON.stringify(this.user))
+
 
     }
   },

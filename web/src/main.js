@@ -19,6 +19,7 @@ Vue.prototype.$axios = axios
 axios.defaults.baseURL = process.env.VUE_APP_SERVER
 
 axios.interceptors.request.use(function (config) {
+  config.headers.token = store.state.user.token
   console.log('请求参数：', config);
   // const token = store.state.user.token;
   // if (Tool.isNotEmpty(token)) {
@@ -46,8 +47,8 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
-console.log('环境：',process.env.NODE_ENV)
-console.log('服务器：',process.env.VUE_APP_SERVER)
+console.log('环境：', process.env.NODE_ENV)
+console.log('服务器：', process.env.VUE_APP_SERVER)
 
 new Vue({
   router,

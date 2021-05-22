@@ -57,6 +57,7 @@
 <script>
 import store from '@/store'
 
+
 export default {
   data () {
     return {
@@ -67,7 +68,11 @@ export default {
         loginName: '',
         password: ''
       },
-      user: {},
+      user: {
+        id: "",
+        loginName: "",
+        name: ""
+      },
       ruleInline: {
         loginName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -84,10 +89,13 @@ export default {
   //     type: Object
   //   }
   // },
+  created () {
+
+  },
   methods: {
     logout () {
       this.$axios({
-        url: "user/logout/" + JSON.parse(localStorage.getItem("token")),
+        url: "user/logout/" + store.state.user.token,
         method: "get",
         params: {
         }
@@ -95,6 +103,10 @@ export default {
         const data = res.data
         if (data.success) {
           console.log(data)
+          this.$Message.success(data.success);
+          location.href = "/"
+          //清空token
+          localStorage.clear()
         } else {
           this.$Message.error(data.message);
         }
@@ -118,8 +130,7 @@ export default {
             if (data.success) {
 
               this.user = data.content
-              localStorage.setItem("user", JSON.stringify(this.user))
-              localStorage.setItem("token", JSON.stringify(this.user.token))
+              // localStorage.setItem("token", JSON.stringify(this.user.token))
               store.commit("setUser", this.user)
               this.modal = false
             } else {

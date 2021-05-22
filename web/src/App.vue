@@ -15,27 +15,27 @@
     </div> -->
     <!--    <head-nav></head-nav>-->
     <router-view />
-    <!--    <foot-nav></foot-nav>-->
+    <foot-nav></foot-nav>
   </div>
 </template>
 <script>
-import store from '@/store'
+// import store from '@/store'
 
 
 // import headNav from './components/header/header.vue'
 //import vipHots from './components/vipHots/vipHots.vue'
-// import footNav from './components/footer/footer.vue'
+import footNav from './components/footer/footer.vue'
 import login from './components/login.vue'
 export default {
   data () {
     return {
       routerFlag: true,
-      user: {}
     }
   },
   created () {
     this.load(),
       this.routerTo()
+
     // this.user = computed(() => {
     //   store.state.user
     // })
@@ -72,7 +72,8 @@ export default {
     }
   },
   components: {
-    login
+    login,
+    footNav
   }
 }
 </script>
