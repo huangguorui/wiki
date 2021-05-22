@@ -14,6 +14,7 @@
     <div @click="handle">
       <div v-show="user.id">
         欢迎用户 《{{user.name}}》登录
+        <Button @click="logout">退出登录</Button>
       </div>
       <div @click="modal = true"
            v-show="!user.id">登录</div>
@@ -84,6 +85,25 @@ export default {
   //   }
   // },
   methods: {
+    logout () {
+      this.$axios({
+        url: "user/logout/" + JSON.parse(localStorage.getItem("token")),
+        method: "get",
+        params: {
+        }
+      }).then(res => {
+        const data = res.data
+        if (data.success) {
+          console.log(data)
+        } else {
+          this.$Message.error(data.message);
+        }
+
+        this.loading = false
+
+
+      })
+    },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {

@@ -10,8 +10,12 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       //没有值优先读取本地缓存
-      console.log(user)
-      state.user = user
+
+      // if (localStorage.getItem("user") != null) {
+      //   state.user = localStorage.getItem("user")
+      // } else {
+      //   state.user = user
+      // }
 
     }
   },
