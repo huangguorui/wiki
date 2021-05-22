@@ -10,40 +10,47 @@
 }
 </style>
 <template>
-  <div @click="handle">
-    <div @click="modal = true">登录</div>
-    <Modal title="用户登陆"
-           v-model="modal"
-           :maskClosable="false"
-           :footerHide="true"
-           width="320"
-           class-name="vertical-center-modal">
-      <Form ref="formData"
-            :model="formData"
-            :rules="ruleInline">
-        <FormItem prop="loginName">
-          <Input type="text"
-                 v-model="formData.loginName"
-                 placeholder="请输入登录名">
-          <Icon type="ios-person-outline"
-                slot="prepend"></Icon>
-          </Input>
-        </FormItem>
-        <FormItem prop="password">
-          <Input type="password"
-                 v-model="formData.password"
-                 placeholder="请输入密码">
-          <Icon type="ios-lock-outline"
-                slot="prepend"></Icon>
-          </Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary"
-                  @click="handleSubmit('formData')">登陆</Button>
-        </FormItem>
-      </Form>
+  <div>
+    <div @click="handle">
+      <div v-show="user.id">
+        欢迎用户 《{{user.name}}》登录
+      </div>
+      <div @click="modal = true"
+           v-show="!user.id">登录</div>
+      <Modal title="用户登陆"
+             v-model="modal"
+             :maskClosable="false"
+             :footerHide="true"
+             width="320"
+             class-name="vertical-center-modal">
+        <Form ref="formData"
+              :model="formData"
+              :rules="ruleInline">
+          <FormItem prop="loginName">
+            <Input type="text"
+                   v-model="formData.loginName"
+                   placeholder="请输入登录名">
+            <Icon type="ios-person-outline"
+                  slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem prop="password">
+            <Input type="password"
+                   v-model="formData.password"
+                   placeholder="请输入密码">
+            <Icon type="ios-lock-outline"
+                  slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary"
+                    @click="handleSubmit('formData')">登陆</Button>
+          </FormItem>
+        </Form>
 
-    </Modal>
+      </Modal>
+    </div>
+
   </div>
 </template>
 <script>
@@ -57,6 +64,7 @@ export default {
         loginName: '',
         password: ''
       },
+      user: {},
       ruleInline: {
         loginName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -84,8 +92,10 @@ export default {
             data: this.formData
           }).then(res => {
             const data = res.data
-            console.log(data)
+            console.log(data.content)
             if (data.success) {
+
+              this.user = data.content
               this.modal = false
             } else {
               this.$Message.error(data.message);
