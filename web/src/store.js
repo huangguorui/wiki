@@ -11,8 +11,7 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user
 
-      localStorage.setItem("user", JSON.stringify(this.user))
-
+      localStorage.setItem("user", JSON.stringify(user))
 
     }
   },

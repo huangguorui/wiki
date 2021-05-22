@@ -12,12 +12,12 @@
 <template>
   <div>
     <div @click="handle">
-      <div v-show="user.id">
-        欢迎用户 《{{user.name}}》登录
+      <div v-show=" $store.state.user.id">
+        欢迎用户 《{{$store.state.user.name}}》登录
         <Button @click="logout">退出登录</Button>
       </div>
       <div @click="modal = true"
-           v-show="!user.id">登录</div>
+           v-show="!$store.state.user.id">登录</div>
       <Modal title="用户登陆"
              v-model="modal"
              :maskClosable="false"
@@ -103,7 +103,7 @@ export default {
         const data = res.data
         if (data.success) {
           console.log(data)
-          this.$Message.success(data.success);
+          this.$Message.success("退出成功");
           location.href = "/"
           //清空token
           localStorage.clear()

@@ -5,13 +5,14 @@ import About from './views/about.vue'
 import AdminEbook from './views/admin/admin-ebook.vue'
 import AdminCategory from './views/admin/admin-category.vue'
 import AdminUser from './views/admin/admin-user.vue'
+import store from '@/store'
 
 
 Vue.use(Router)
 import iView from 'iview';
 Vue.use(iView);
 const router = new Router({
-  // mode: 'history',
+  mode: 'history',
   base: process.env.BASE_URL,
   linkActiveClass: 'active',
   routes: [{
@@ -28,6 +29,8 @@ const router = new Router({
       component: About,
       meta: {
         title: "关于我们",
+        loginRequire: true
+
       }
     },
     {
@@ -36,6 +39,8 @@ const router = new Router({
       component: AdminEbook,
       meta: {
         title: "后台管理",
+        loginRequire: true
+
       }
     },
     {
@@ -44,19 +49,22 @@ const router = new Router({
       component: AdminCategory,
       meta: {
         title: "后台主题管理",
+        loginRequire: true
+
       }
-    }
-    ,
+    },
     {
       path: '/admin/user',
       name: 'AdminUser',
       component: AdminUser,
       meta: {
         title: "后台主题管理",
+        loginRequire: true
+
       }
     }
 
-    
+
     // {
     //   path: '/404',
     //   name: '404',
@@ -85,26 +93,50 @@ const router = new Router({
   }
 })
 
+
+
+// 路由登录拦截
 router.beforeEach((to, from, next) => {
+  // 要不要对meta.loginRequire属性做监控拦截
+  if (to.matched.some(function (item) {
+      console.log(item, "是否需要登录校验：", item.meta.loginRequire);
+      return item.meta.loginRequire
+    })) {
+    const loginUser = store.state.user;
 
-  /* 路由发生变化修改页面meta */
-  if (to.meta.content) {
-    let head = document.getElementsByTagName('head');
-    let meta = document.createElement('meta');
-
-    meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
-    meta.name = 'viewport';
-    head[0].appendChild(meta)
+    if ("{}" == JSON.stringify(loginUser)) {
+      // 满足条件就是空
+      console.log("用户未登录！");
+      next('/');
+    } else {
+      next();
+    }
+  } else {
+    next();
   }
-  /* 路由发生变化修改页面title */
-  if (to.meta.title) {
-    document.title = to.meta.title;
-  }
-  //console.log('拦截到的数据为',to)
-
-  iView.LoadingBar.start();
-  next();
 });
+
+
+// router.beforeEach((to, from, next) => {
+
+//   /* 路由发生变化修改页面meta */
+//   if (to.meta.content) {
+//     let head = document.getElementsByTagName('head');
+//     let meta = document.createElement('meta');
+
+//     meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+//     meta.name = 'viewport';
+//     head[0].appendChild(meta)
+//   }
+//   /* 路由发生变化修改页面title */
+//   if (to.meta.title) {
+//     document.title = to.meta.title;
+//   }
+//   //console.log('拦截到的数据为',to)
+
+//   iView.LoadingBar.start();
+//   next();
+// });
 
 router.afterEach(() => {
   iView.LoadingBar.finish();
