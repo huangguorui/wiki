@@ -98,6 +98,8 @@ export default {
             if (data.success) {
 
               this.user = data.content
+              localStorage.setItem("user", JSON.stringify(this.user))
+              localStorage.setItem("token", JSON.stringify(this.user.token))
               store.commit("setUser", this.user)
               this.modal = false
             } else {

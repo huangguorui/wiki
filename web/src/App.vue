@@ -21,6 +21,7 @@
 <script>
 import store from '@/store'
 
+
 // import headNav from './components/header/header.vue'
 //import vipHots from './components/vipHots/vipHots.vue'
 // import footNav from './components/footer/footer.vue'
