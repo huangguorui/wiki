@@ -54,6 +54,8 @@
   </div>
 </template>
 <script>
+import store from '@/store'
+
 export default {
   data () {
     return {
@@ -96,6 +98,7 @@ export default {
             if (data.success) {
 
               this.user = data.content
+              store.commit("setUser", this.user)
               this.modal = false
             } else {
               this.$Message.error(data.message);
