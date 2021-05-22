@@ -8,6 +8,7 @@ import com.jiawa.wiki.exception.BusinessException;
 import com.jiawa.wiki.exception.BusinessExceptionCode;
 import com.jiawa.wiki.mapper.UserMapper;
 import com.jiawa.wiki.req.UserQueryReq;
+import com.jiawa.wiki.req.UserResetPasswordReq;
 import com.jiawa.wiki.req.UserSaveReq;
 import com.jiawa.wiki.resp.UserQueryResp;
 import com.jiawa.wiki.resp.PageResp;
@@ -108,6 +109,18 @@ public class UserService {
 //            userMapper.updateByPrimaryKey(user);
         }
     }
+
+    /**
+     * 修改密码
+     * @param req
+     */
+    public void resetPassword(UserResetPasswordReq req){
+        //复制
+        User user = CopyUtil.copy(req,User.class);
+        userMapper.updateByPrimaryKeySelective(user);
+
+    }
+
 
     public void delete(Long id){
         //根据主键删除

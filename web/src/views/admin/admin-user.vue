@@ -21,6 +21,17 @@
       <div>您确定删除数据id为{{this.delList}}的数据吗</div>
       <Button @click="del">确定</Button>
     </Modal>
+
+    <Modal v-model="isResetPassword"
+           :title="titleDrawer"
+           :footer-hide="true">
+      <Input v-model="resetPassword"
+             placeholder="请输入密码："></Input>
+
+      <Button type="primary"
+              @click="reset">确定</Button>
+    </Modal>
+
     <Modal v-model="isCloseDrawer"
            :title="titleDrawer"
            :footer-hide="true">
@@ -32,7 +43,7 @@
         <FormItem label="登录名"
                   prop="loginName">
           <Input v-model="formData.loginName"
-                 :disabled="!!formData.id"
+                 :disabled="!!formData.id&&!isResetPassword"
                  placeholder=""></Input>
         </FormItem>
         <FormItem label="昵称"
@@ -54,6 +65,7 @@
           <Button @click="handleReset('formData')"
                   style="margin-left: 8px">Reset</Button>
         </FormItem>
+        {{isResetPassword}}
       </Form>
     </Modal>
   </div>
@@ -72,6 +84,7 @@ export default {
     //   }
     // };
     return {
+      isResetPassword: false,
       search: "",
       formData: {
         id: null,//不添加会替换
@@ -115,15 +128,16 @@ export default {
             return h('div', [
               h('Button', {
                 props: {
-                  type: 'error',
+                  type: 'primary',
                   size: 'small'
                 },
                 on: {
                   click: () => {
-                    console.log(params.row)
-                    // this.delList = [params.row.id]
-                    this.delList = params.row.id
-                    this.isDeleteDrawer = true
+                    this.isResetPassword = true
+                    this.titleDrawer = '重置密码'
+                    // 防止表格中的数据随着修改而发生改变
+
+                    this.formData = Object.assign({}, params.row)
                   }
                 }
               }, '重置'),
@@ -178,6 +192,7 @@ export default {
         page: 1
       },
       delList: null,
+      resetPassword: "",
 
     }
   },
@@ -185,6 +200,32 @@ export default {
     this.getList()
   },
   methods: {
+    resetPwd (data) {
+      //key 盐值
+      // console.log(data)
+      this.$axios({
+        url: "/user/reset-password",
+        method: "post",
+        data: data
+      }).then(res => {
+        const data = res.data
+        if (data.success) {
+          this.getList()
+          this.isResetPassword = false
+          this.resetPassword = ""
+        } else {
+          this.isResetPassword = true
+          this.$Message.error(data.message);
+        }
+      })
+    },
+
+    reset () {
+      this.formData.password = this.resetPassword
+      console.log(this.formData)
+      this.resetPwd(this.formData)
+
+    },
     seleteValue () {
       this.pageInfo.page = 1
       this.getList()
